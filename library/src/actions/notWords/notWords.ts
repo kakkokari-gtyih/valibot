@@ -132,11 +132,11 @@ export function notWords(
     message,
     '~run'(dataset, config) {
       if (dataset.typed) {
-        // Hint: A word consists of at least one code unit, so the word count
-        // never exceeds the length of the input. This allows us to skip the
-        // expensive segmentation if the requirement is greater than the length
-        // and therefore can never be matched
-        if (this.requirement <= dataset.value.length) {
+        // Hint: A word consists of at least one code unit, so the word count is
+        // always between 0 and the length of the input. This allows us to skip
+        // the expensive segmentation if the requirement is outside of these
+        // bounds and therefore can never be matched
+        if (this.requirement >= 0 && this.requirement <= dataset.value.length) {
           const count = _getWordCount(this.locales, dataset.value);
           if (count === this.requirement) {
             _addIssue(this, 'words', dataset, config, {
